@@ -7,4 +7,5 @@ export type BoardGameIo = {
   client: ReturnType<typeof Client<TicTacToeState>>
   state: Ref<ClientState<TicTacToeState>>
 }
-export const BoardGameIoKey: InjectionKey<BoardGameIo> = Symbol('boardgameIo')
+export const BoardGameIoPlayer0Key: InjectionKey<BoardGameIo> = Symbol('boardgameIo')
+export const BoardGameIoPlayer1Key: InjectionKey<BoardGameIo> = Symbol('boardgameIo')
