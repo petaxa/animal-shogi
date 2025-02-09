@@ -44,8 +44,6 @@ export const TicTacToe: Game<TicTacToeState> = {
 
   moves: {
     clickCell: ({ G, ctx, events }, locale: Locale): typeof INVALID_MOVE | void => {
-      console.log('clickCell', locale)
-
       if (G.pickingPieceLocale === null) {
         const pickingPiece =
           locale.kind === 'cell'
@@ -53,14 +51,12 @@ export const TicTacToe: Game<TicTacToeState> = {
             : G.capturedPiece[locale.player][locale.index]
 
         if (!pickingPiece || pickingPiece.owner !== ctx.currentPlayer) {
-          console.log('wrong piece is holding')
           return
         }
         G.pickingPieceLocale = locale
       } else {
         // 移動先はセルじゃないといけない
         if (locale.kind !== 'cell') {
-          console.log('wrong locale')
           G.pickingPieceLocale = null
           return
         }
@@ -71,7 +67,6 @@ export const TicTacToe: Game<TicTacToeState> = {
             ? G.cells[G.pickingPieceLocale.row][G.pickingPieceLocale.col]
             : G.capturedPiece[G.pickingPieceLocale.player][G.pickingPieceLocale.index]
         if (!pickingPiece) {
-          console.log('empty holding')
           G.pickingPieceLocale = null
           return
         }
@@ -88,7 +83,6 @@ export const TicTacToe: Game<TicTacToeState> = {
             ctx.currentPlayer,
           )
         ) {
-          console.log('Cant move')
           G.pickingPieceLocale = null
           return
         }
