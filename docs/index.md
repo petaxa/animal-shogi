@@ -11,8 +11,9 @@ features:
   - title: ToDo
     details: Here’s the lineup of tasks
     link: /todo
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: ADR
+    details: Architectural Decision Records
+    link: /adr/delete-vue-plugin
   - title: Feature C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---

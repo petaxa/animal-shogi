@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { computed, inject, type InjectionKey } from "vue";
-import type { Locale } from "./pieces/types";
-import type { BoardGameIo } from "@/symbols";
+import { computed } from "vue";
+import type { Locale } from "../game/pieces/types";
+import { boardgameIo } from "../game/init";
+import { animalShogi } from '../game/client'
+import type { PlayerID } from "boardgame.io";
 
 const props = defineProps<{
-  injectKey: InjectionKey<BoardGameIo>
+  playerId: PlayerID
 }>()
 
-const boardGameIo = inject(props.injectKey);
+const boardGameIo = boardgameIo(animalShogi, props.playerId);
 if (boardGameIo == undefined) {
   throw new Error("inject invalid")
 }
@@ -51,7 +53,7 @@ const localeCapturedFuctory = (player: string, index: number): Locale => {
 </script>
 
 <template>
-  <div>
+  <div v-if="boardGameIo.state">
     <p>{{ `${state.ctx.currentPlayer} のターンです` }}</p>
     <table>
       <!-- TODO: v-for の key を修正する -->

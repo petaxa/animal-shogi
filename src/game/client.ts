@@ -4,15 +4,15 @@ import type { Direction, Locale, Piece } from './pieces/types'
 import { directionOffsets, findDirections } from './pieces/utils'
 import { ENDLINE_MAP } from './pieces/const'
 
-export type TicTacToeState = {
+export type animalShogiState = {
   cells: (Piece | null)[][]
   pickingPieceLocale: Locale | null
   capturedPiece: { [key in PlayerID]: Piece[] }
 }
 
-export const TicTacToe: Game<TicTacToeState> = {
-  setup: ({ ctx }): TicTacToeState => {
-    const cells: TicTacToeState['cells'] = [
+export const animalShogi: Game<animalShogiState> = {
+  setup: ({ ctx }): animalShogiState => {
+    const cells: animalShogiState['cells'] = [
       [
         { type: 'geraffe', owner: '1' },
         { type: 'lion', owner: '1' },
@@ -140,7 +140,7 @@ export const TicTacToe: Game<TicTacToeState> = {
   },
 }
 
-function IsVictory(cells: TicTacToeState['cells'], currentPlayer: PlayerID) {
+function IsVictory(cells: animalShogiState['cells'], currentPlayer: PlayerID) {
   if (currentPlayer !== '0' && currentPlayer !== '1') {
     throw Error('currentPlayer is invalid')
   }
@@ -161,13 +161,13 @@ function IsVictory(cells: TicTacToeState['cells'], currentPlayer: PlayerID) {
 
 // Return true if all `cells` are occupied.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function IsDraw(cells: TicTacToeState['cells']) {
+function IsDraw(cells: animalShogiState['cells']) {
   // TODO: 一旦未実装。3 度同じ盤面が繰り返されるとドロー
   return false
 }
 
 function isMove(
-  cells: TicTacToeState['cells'],
+  cells: animalShogiState['cells'],
   pickingPieceLocale: Locale,
   destinationLocale: Extract<Locale, { kind: 'cell' }>,
   pickingPiece: Piece,
