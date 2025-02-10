@@ -3,7 +3,7 @@ import { Client } from 'boardgame.io/client'
 import { ref, type Ref } from 'vue'
 import { SocketIO } from 'boardgame.io/multiplayer'
 import type { ClientState } from 'boardgame.io/dist/types/src/client/client'
-import type { animalShogiState } from './client'
+import type { animalShogiState } from "../../../animal-shogi-core/src/client"
 
 export type BoardGameIo = {
   client: ReturnType<typeof Client<animalShogiState>>

@@ -1,0 +1,21 @@
+{
+  "name": "animal-shogi-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "module": "commonjs",
+  "esModuleInterop": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "jiti src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.13.1",
+    "boardgame.io": "^0.50.2",
+    "esm": "^3.2.25",
+    "jiti": "^2.4.2"
+  }
+}

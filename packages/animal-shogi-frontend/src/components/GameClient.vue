@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { Locale } from "../game/pieces/types";
+import { type Locale, animalShogi } from "../../../animal-shogi-core";
 import { boardgameIo } from "../game/init";
-import { animalShogi } from '../game/client'
 import type { PlayerID } from "boardgame.io";
 
 const props = defineProps<{
