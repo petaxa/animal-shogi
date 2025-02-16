@@ -1,79 +1,53 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { type Locale, animalShogi } from "../../../animal-shogi-core";
-import { boardgameIo } from "../game/init";
+import { computed, type Ref } from "vue";
+import { type animalShogiState } from "../../../animal-shogi-core";
 import type { PlayerID } from "boardgame.io";
+import Pieces from "./Pieces.vue";
+import { localeCellFuctory, localeCapturedFuctory } from "../game/utils";
+import type { Client, ClientState } from "boardgame.io/dist/types/src/client/client";
 
 const props = defineProps<{
-  playerId: PlayerID
+  state: Ref<Exclude<ClientState<animalShogiState>, null>>,
+  client: ReturnType<typeof Client<animalShogiState>>
 }>()
 
-const boardGameIo = boardgameIo(animalShogi, props.playerId);
-if (boardGameIo == undefined) {
-  throw new Error("inject invalid")
-}
+const cells = computed(() => props.state.value.G.cells)
+const row = computed(() => props.state.value.G.cells.length)
+const col = computed(() => props.state.value.G.cells[0].length)
+const capturedPiece = computed(() => props.state.value.G.capturedPiece)
 
-const client = boardGameIo.client
-const state = computed(() => {
-  const value = boardGameIo.state.value
-  if (value === null) {
-    throw new Error("ClientState is null")
-  }
-  return value
-})
-
-const cells = computed(() => state.value.G.cells)
-const row = computed(() => state.value.G.cells.length)
-const col = computed(() => state.value.G.cells[0].length)
-const capturedPiece = computed(() => state.value.G.capturedPiece)
+const clickCell = props.client.moves.clickCell
 
 const resultMsg = computed(() => {
-  const isGameOver = state.value.ctx.gameover
+  const isGameOver = props.state.value.ctx.gameover
   if (isGameOver) {
     return isGameOver.winner !== undefined ? `Winner: ${isGameOver.winner}` : "Draw"
   } else {
     return ""
   }
 })
-
-const localeCellFuctory = (row: number, col: number): Locale => {
-  return {
-    kind: "cell",
-    row, col
-  }
-}
-
-const localeCapturedFuctory = (player: string, index: number): Locale => {
-  return {
-    kind: "captured",
-    player, index
-  }
-}
 </script>
 
 <template>
-  <div v-if="boardGameIo.state">
-    <p>{{ `${state.ctx.currentPlayer} のターンです` }}</p>
+  <div v-if="state">
+    <p>{{ `${props.state.value.ctx.currentPlayer} のターンです` }}</p>
     <table>
       <!-- TODO: v-for の key を修正する -->
       <tr v-for="(_, r) in row" :key="r">
-        <td class="cell" :class="cells[r][c]?.owner === '1' ? 'red' : ''" v-for="(_, c) in col" :key="c"
-          @click="client.moves.clickCell(localeCellFuctory(r, c))">
-          {{ cells[r][c]?.type ?? "" }}
+        <td class="cell" :class="cells[r][c]?.owner === '1' ? 'red' : ''" v-for="(_, c) in col" :key="c">
+          <Pieces :type="cells[r][c]?.type ?? ''" :locale="localeCellFuctory(r, c)" @click-cell="clickCell" />
         </td>
       </tr>
     </table>
     <p>持ち駒</p>
     <div>
       <p>player1</p>
-      <p v-for="(pieces, i) in capturedPiece[0]" :key="i"
-        @click="client.moves.clickCell(localeCapturedFuctory('0', i))">
+      <p v-for="(pieces, i) in capturedPiece[0]" :key="i" @click="clickCell(localeCapturedFuctory('0', i))">
         {{ pieces.type }}</p>
     </div>
     <div>
       <p>player2</p>
-      <p v-for="(pieces, i) in capturedPiece[1]" :key="i"
-        @click="client.moves.clickCell(localeCapturedFuctory('1', i))">
+      <p v-for="(pieces, i) in capturedPiece[1]" :key="i" @click="clickCell(localeCapturedFuctory('1', i))">
         {{ pieces.type }}</p>
     </div>
     <p>{{ resultMsg }}</p>
@@ -85,7 +59,6 @@ const localeCapturedFuctory = (player: string, index: number): Locale => {
   border: 1px solid #555;
   width: 50px;
   height: 50px;
-  line-height: 50px;
   text-align: center;
 }
 

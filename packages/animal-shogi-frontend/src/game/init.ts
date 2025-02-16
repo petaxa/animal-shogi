@@ -2,24 +2,40 @@ import type { Game, PlayerID } from 'boardgame.io'
 import { Client } from 'boardgame.io/client'
 import { ref, type Ref } from 'vue'
 import { SocketIO } from 'boardgame.io/multiplayer'
-import type { ClientState } from 'boardgame.io/dist/types/src/client/client'
-import type { animalShogiState } from "../../../animal-shogi-core/src/client"
+import type { ClientOpts, ClientState } from 'boardgame.io/dist/types/src/client/client'
+import type { animalShogiState } from '../../../animal-shogi-core/src/client'
 
 export type BoardGameIo = {
   client: ReturnType<typeof Client<animalShogiState>>
   state: Ref<ClientState<animalShogiState>>
 }
 
-export function boardgameIo(game: Game, playerID: PlayerID): BoardGameIo {
-  const client = Client({
-    game,
-    multiplayer: SocketIO({ server: 'localhost:8000' }),
-    playerID,
-  })
+export function boardgameIo(
+  game: Game,
+  // style: 'single' | 'multi',
+  style: string,
+  matchID?: string,
+  playerID?: PlayerID,
+): BoardGameIo {
+  // TODO: playerID, matchID の存在チェックを行わないといけない
+  const clientOpts: ClientOpts =
+    style === 'single'
+      ? {
+          game,
+        }
+      : {
+          game,
+          multiplayer: SocketIO({ server: 'localhost:8000' }),
+          playerID,
+          matchID,
+        }
+
+  const client = Client(clientOpts)
   const state = ref(client.getState())
 
   client.start()
   client.subscribe((s) => (state.value = s))
+
   return {
     client,
     state,

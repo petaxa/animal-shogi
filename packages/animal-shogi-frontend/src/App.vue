@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import GameClient from './components/GameClient.vue';
+import { RouterView } from 'vue-router';
+
 </script>
 
 <template>
-  <GameClient playerId="0" />
+  <RouterView />
 </template>
