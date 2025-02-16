@@ -11,9 +11,16 @@ const router = createRouter({
       component: Loby,
     },
     {
-      path: '/room/:style/:roomId/:playerId',
-      name: 'room',
+      path: '/room/single',
+      name: 'singleRoom',
       component: Room,
+      props: { playStyle: 'single' },
+    },
+    {
+      path: '/room/multi/:roomId/:playerId',
+      name: 'multiRoom',
+      component: Room,
+      props: (route) => ({ playStyle: 'multi', ...route.params }),
     },
   ],
 })

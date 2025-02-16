@@ -18,16 +18,25 @@ export function boardgameIo(
   playerID?: PlayerID,
 ): BoardGameIo {
   // TODO: playerID, matchID の存在チェックを行わないといけない
+  // TODO: 共通オプションを共通化したい
   const clientOpts: ClientOpts =
     style === 'single'
       ? {
           game,
+          debug: {
+            collapseOnLoad: true,
+            hideToggleButton: true,
+          },
         }
       : {
           game,
           multiplayer: SocketIO({ server: 'localhost:8000' }),
           playerID,
           matchID,
+          debug: {
+            collapseOnLoad: true,
+            hideToggleButton: true,
+          },
         }
 
   const client = Client(clientOpts)

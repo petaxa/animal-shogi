@@ -9,7 +9,7 @@ const roomId = ref("")
   <div>
     <section>
       <p>シングルプレイ</p>
-      <RouterLink :to="`/room/single/${playerSide}`">Room →</RouterLink>
+      <RouterLink to="/room/single">Room →</RouterLink>
     </section>
     <section>
       <p>マルチプレイ</p>
