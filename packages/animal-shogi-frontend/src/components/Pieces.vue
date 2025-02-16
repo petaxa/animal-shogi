@@ -20,12 +20,16 @@ const imageUrl = computed(() => props.type === "" ? null : getImageUrl(props.typ
 <template>
   <div @click="$emit('clickCell', locale)">
     <img v-if="imageUrl" :src="imageUrl" alt="">
+    <div v-else class="empty"></div>
   </div>
 </template>
 
 <style scoped>
-img {
-  width: 100%;
-  height: 100%;
+img,
+.empty {
+  /* TODO: 相対値(100% , 100%) で定義すべき */
+  /* empty のときにうまくいかず、暫定的に絶対値でスタイリング */
+  width: 50px;
+  height: 50px;
 }
 </style>
