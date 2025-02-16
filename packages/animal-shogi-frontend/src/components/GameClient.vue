@@ -11,6 +11,7 @@ const props = defineProps<{
   client: ReturnType<typeof Client<animalShogiState>>
 }>()
 
+// TODO: 不変条件違反のエラーが出ている。直したい。
 const cells = computed(() => props.state.value.G.cells)
 const row = computed(() => props.state.value.G.cells.length)
 const col = computed(() => props.state.value.G.cells[0].length)
