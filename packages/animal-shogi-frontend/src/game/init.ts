@@ -10,34 +10,37 @@ export type BoardGameIo = {
   state: Ref<ClientState<animalShogiState>>
 }
 
-export function boardgameIo(
-  game: Game,
-  // style: 'single' | 'multi',
-  style: string,
-  matchID?: string,
-  playerID?: PlayerID,
-): BoardGameIo {
-  // TODO: playerID, matchID の存在チェックを行わないといけない
-  // TODO: 共通オプションを共通化したい
-  const clientOpts: ClientOpts =
-    style === 'single'
-      ? {
-          game,
-          debug: {
-            collapseOnLoad: true,
-            hideToggleButton: true,
-          },
-        }
+type Option =
+  | {
+      style: 'single'
+    }
+  | {
+      style: 'multi'
+      matchId: string
+      playerId: PlayerID
+    }
+
+export function boardgameIo(game: Game, option: Option): BoardGameIo {
+  if (option.style === 'multi' && (!option.playerId || !option.matchId)) {
+    throw new Error('missed multi options')
+  }
+
+  const baseOpts: ClientOpts = {
+    game,
+    debug: {
+      collapseOnLoad: true,
+      hideToggleButton: true,
+    },
+  }
+  const additionalOpts: Partial<ClientOpts> =
+    option.style === 'single'
+      ? {}
       : {
-          game,
           multiplayer: SocketIO({ server: 'localhost:8000' }),
-          playerID,
-          matchID,
-          debug: {
-            collapseOnLoad: true,
-            hideToggleButton: true,
-          },
+          playerID: option.playerId,
+          matchID: option.matchId,
         }
+  const clientOpts: ClientOpts = { ...baseOpts, ...additionalOpts }
 
   const client = Client(clientOpts)
   const state = ref(client.getState())

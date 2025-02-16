@@ -6,20 +6,25 @@ import { type Ref } from 'vue';
 import type { ClientState } from 'boardgame.io/dist/types/src/client/client';
 import type { PlayerID } from 'boardgame.io';
 
-const props = defineProps<{
-  roomId: string | undefined,
-  playerId: PlayerID | undefined,
-  // playStyle: "multi" | "single"
-  playStyle: string
-}>()
+// TODO: multi, single を定数として定義する。
+const props = defineProps<
+  {
+    playStyle: 'single'
+  }
+  | {
+    playStyle: 'multi'
+    roomId: string
+    playerId: PlayerID
+  }>()
 
-const boardGameIo = boardgameIo(animalShogi, props.playStyle, props.roomId, props.playerId);
+const option = props.playStyle === "single" ? { style: props.playStyle } : { style: props.playStyle, matchId: props.roomId, playerId: props.playerId }
+
+const boardGameIo = boardgameIo(animalShogi, option);
 </script>
 
 <template>
   <div>
     <RouterLink to="/">← 戻る</RouterLink>
-    <p>{{ playerId }}</p>
     <GameClient v-if="boardGameIo.state.value"
       :state="(boardGameIo.state) as Ref<Exclude<ClientState<animalShogiState>, null>>" :client="boardGameIo.client" />
   </div>
